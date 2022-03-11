@@ -1,0 +1,2 @@
+
+    int size = triangle.size();

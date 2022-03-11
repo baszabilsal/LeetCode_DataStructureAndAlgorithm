@@ -1,0 +1,21 @@
+{
+    "files.associations": {
+        "string": "cpp",
+        "xlocale": "cpp",
+        "ostream": "cpp",
+        "utility": "cpp",
+        "initializer_list": "cpp",
+        "xstring": "cpp",
+        "xutility": "cpp",
+        "type_traits": "cpp",
+        "cmath": "cpp",
+        "istream": "cpp",
+        "memory": "cpp",
+        "tuple": "cpp",
+        "xlocnum": "cpp",
+        "limits": "cpp",
+        "system_error": "cpp",
+        "xtr1common": "cpp",
+        "cstdlib": "cpp"
+    }
+}

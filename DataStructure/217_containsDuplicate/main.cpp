@@ -2,18 +2,14 @@
 using namespace std;
 bool containsDuplicate(vector<int> &nums)
 {
-    sort(nums.begin(), nums.end());
-    int temp = 0;
+    map<int, int> m;
     for (int i = 0; i < nums.size(); i++)
     {
-        if (nums[i] != temp || i == 0)
-        {
-            temp = nums[i];
-        }
-        else
+        if (m[nums[i]] > 0)
         {
             return true;
         }
+        m[nums[i]] = 1;
     }
     return false;
 }

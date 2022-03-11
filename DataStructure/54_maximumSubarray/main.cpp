@@ -3,20 +3,13 @@ using namespace std;
 int maxSubArray(vector<int> &nums)
 {
     int sum = nums[0];
-    int maxEnd = nums[0];
+    int maxSize = nums[0];
     for (int i = 1; i < nums.size(); i++)
     {
-        sum += nums[i];
-        if (nums[i] > sum)
-        {
-            sum = nums[i];
-        }
-        if (sum > maxEnd)
-        {
-            maxEnd = sum;
-        }
+        sum = max(sum + nums[i], nums[i]);
+        maxSize = max(sum, maxSize);
     }
-    return maxEnd;
+    return maxSize;
 }
 int main()
 {

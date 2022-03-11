@@ -2,20 +2,14 @@
 using namespace std;
 vector<int> twoSum(vector<int> &nums, int target)
 {
-    vector<int> hash;
+    map<int, int> m;
     for (int i = 0; i < nums.size(); i++)
     {
-        if (i != 0)
+        if (m.find(nums[i]) != m.end())
         {
-            for (int j = 0; j < hash.size(); j++)
-            {
-                if (nums[i] + nums[j] == target)
-                {
-                    return {j, i};
-                }
-            }
+            return {m[nums[i]], i};
         }
-        hash.push_back(target - nums[i]);
+        m[target - nums[i]] = i;
     }
     return {-1, -1};
 }
