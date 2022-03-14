@@ -1,6 +1,10 @@
 #include <bits/stdc++.h>
+#include <algorithm>
 using namespace std;
 int main()
 {
-    cout << (6 ^ 3 ^ 5 ^ 3 ^ 6) << endl;
+    string a = "S";
+    std::for_each(a.begin(), a.end(), [](char &c)
+                  { c = ::tolower(c); });
+    cout << a << endl;
 }

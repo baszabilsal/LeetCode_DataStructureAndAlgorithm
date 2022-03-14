@@ -2,19 +2,20 @@
 using namespace std;
 int maxArea(vector<int> &height)
 {
+    int maxSize = 0;
     int l = 0;
     int r = height.size() - 1;
-    int maxSize = 0;
     while (l < r)
     {
-        maxSize = max(maxSize, ((r - l) * min(height[r], height[l])));
-        if (height[r] > height[l])
+        int minHeight = min(height[l], height[r]);
+        maxSize = max(maxSize, (minHeight * (r - l)));
+        if (height[l] > height[r])
         {
-            l++;
+            r--;
         }
         else
         {
-            r--;
+            l++;
         }
     }
     return maxSize;

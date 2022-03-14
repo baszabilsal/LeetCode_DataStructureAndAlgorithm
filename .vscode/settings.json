@@ -16,6 +16,7 @@
         "limits": "cpp",
         "system_error": "cpp",
         "xtr1common": "cpp",
-        "cstdlib": "cpp"
+        "cstdlib": "cpp",
+        "algorithm": "cpp"
     }
 }
