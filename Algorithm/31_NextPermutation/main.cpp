@@ -11,6 +11,7 @@ void nextPermutation(vector<int> &nums)
             break;
         }
     }
+    cout << startPosition << endl;
     if (startPosition == -1)
     {
         reverse(nums.begin(), nums.end());
@@ -30,7 +31,7 @@ void nextPermutation(vector<int> &nums)
 }
 int main()
 {
-    vector<int> nums = {3, 2, 5, 3, 1};
+    vector<int> nums = {7, 5, 6, 4, 3, 2, 1};
     nextPermutation(nums);
     for (int i = 0; i < nums.size(); i++)
     {

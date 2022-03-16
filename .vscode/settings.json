@@ -17,6 +17,10 @@
         "system_error": "cpp",
         "xtr1common": "cpp",
         "cstdlib": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "exception": "cpp",
+        "ios": "cpp",
+        "streambuf": "cpp",
+        "xiosbase": "cpp"
     }
 }
