@@ -27,8 +27,8 @@ public:
 };
 int main()
 {
-    Solution st;
-    vector<int> nums = {0, 0, 1, 9};
+    Solution2 st;
+    vector<int> nums = {1, 1, 2, 2};
     vector<vector<int>> b = st.permuteUnique(nums);
     for (int i = 0; i < b.size(); i++)
     {

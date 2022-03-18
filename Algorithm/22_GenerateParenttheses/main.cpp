@@ -34,6 +34,36 @@ public:
         return output;
     }
 };
+class Solution2
+{
+public:
+    vector<string> output;
+    void solve(int n, int m, string raw)
+    {
+        if (n == 0 && m == 0)
+        {
+            output.push_back(raw);
+            return;
+        }
+        if (n < 0 || m < 0)
+        {
+            return;
+        }
+        if (n > 0)
+        {
+            solve(n - 1, m, raw + "(");
+        }
+        if (n < m)
+        {
+            solve(n, m - 1, raw + ")");
+        }
+    }
+    vector<string> generateParenthesis(int n)
+    {
+        solve(n, n, "");
+        return output;
+    }
+};
 int main()
 {
     Solution st;
