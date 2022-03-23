@@ -1,67 +1,74 @@
 #include <bits/stdc++.h>
-using namespace std;
+using namespace ::std;
+
+const int N = 50000 + 5;
+const int LOG = 13;
+const int SUM = 12 * 9 + 10;
+
+int n;
+int m;
+vector<int> v;
+bool vis[LOG][SUM][SUM][2][2];
+long long memo[LOG][SUM][SUM][2][2];
+
+long long DP(int pos, int prod, int suma, int menor, int start)
+{
+    if (suma > m)
+        return 0;
+    if (pos == v.size())
+    {
+        return prod == 0 and suma == m;
+    }
+    if (vis[pos][prod][suma][menor][start])
+    {
+        cout << suma << " " << pos << endl;
+        return memo[pos][prod][suma][menor][start];
+    }
+    int limit = menor ? 9 : v[pos];
+    long long ans = 0;
+    for (int i = 0; i <= limit; i++)
+    {
+        int new_prod = start ? (prod * i) % m : (i > 0 ? i % m : 0);
+        int new_sum = suma + i;
+        int new_start = start | (i > 0);
+        ans += DP(pos + 1, new_prod, new_sum, menor | (i < v[pos]), new_start);
+    }
+    vis[pos][prod][suma][menor][start] = true;
+
+    return memo[pos][prod][suma][menor][start] = ans;
+}
+
+long long f(long long x)
+{
+    if (x == 0)
+        return 0;
+    v.clear();
+    while (x)
+    {
+        v.push_back(x % 10);
+        x /= 10;
+    }
+    reverse(v.begin(), v.end());
+    long long ans = 0;
+    for (int sum = 1; sum <= 9 * v.size(); sum++)
+    {
+        m = sum;
+        memset(vis, 0, sizeof vis);
+        ans += DP(0, 0, 0, 0, 0);
+    }
+    return ans;
+}
+
 int main()
 {
-    int n, c, k, s = 1;                 // declare n,c,k and s = 1;
-    cout << "\n Enter Number of Rows:"; // print string
-    cin >> n;                           // read input and store in n
-    s = n - 1;                          // set s = n -1; it's mean if n = 3 then s = 2;
-    for (k = 1; k <= n; k++)            // loop n times start with k = 1 end when k = n if n = 3 then run loop 3 times
+    int tc;
+    scanf("%d", &tc);
+    int caso = 1;
+    while (tc--)
     {
-        for (c = 1; c <= s; c++) // loop for push spacebar to console it's depend on s
-        {
-            cout << " ";
-        }
-        s--;                               // s decrease 1 every k + 1
-        for (c = 1; c <= (2 * k) - 1; c++) // loop for push * to console it's depend on k every k times * increase 2
-        {
-            cout << "*";
-        }
-        cout << "\n"; // print new line;
+        long long a, b;
+        scanf("%lld %lld", &a, &b);
+        printf("Case #%d: %lld\n", caso++, f(b) - f(a - 1));
     }
-    // example n = 3, s= 2
-    // loop k = 1, s= 2 first for loop is spacebar 2 times and second loop is * 1 times
-    // loop k = 2, s= 1 first for loop is spacebar 1 times and second loop is * 3 times
-    // loop k = 3, s= 0 first for loop is spacebar 0 times and second loop is * 5 times
-    /* output is the
-
-       *
-      ***
-     *****
-
-     */
-    s = 1;                       // set s = 1;
-    for (k = 1; k <= n - 1; k++) // loop n-1 times start with k = 1 end when k = n-1 if n = 3 then run loop 2 times
-    {
-        for (c = 1; c <= s; c++) // loop for push spacebar to console it's depend on s
-        {
-            cout << " ";
-        }
-        s++;                                   // s increate 1 every k + 1
-        for (c = 1; c <= 2 * (n - k) - 1; c++) // loop for push * to console it's depend on k every k times * decrease 2
-        {
-            cout << "*";
-        }
-        cout << "\n"; // print new line;
-    }
-    // example n = 3, s= 1
-    // loop k = 1, s= 2 first for loop is spacebar 1 times and second loop is * 3 times
-    // loop k = 2, s= 3 first for loop is spacebar 2 times and second loop is * 1 times
-    /* output is the
-
-     ***
-      *
-
-     */
-
-    /*output or program when set input = 4
-           *
-          ***
-         *****
-        *******
-         *****
-          ***
-           * 
-    /*
-
+    return 0;
 }

@@ -6,7 +6,6 @@ bool DP[N][2][2][2][2][2][2];
 bool S[N][2][2][2][2][2][2];
 bool solve2(string &s, int start, int p1, int p2, int p3, int p4, int p5, int p6)
 {
-    cout << "Start : " << start << "  " << p1 << p2 << p3 << p4 << p5 << p6 << endl;
     if (p1 <= 1 && p1 == p6 && p2 == p5 && p3 == p4)
         return false;
     if (p1 <= 1 && p1 == p5 && p2 == p4)
