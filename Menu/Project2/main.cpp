@@ -1,123 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
-void getMainMenu();
-void getBackTrackingMenu();
-void runEightQueen();
-void runKnightTour();
-void runSudoku();
-int readInputMainMenu();
-void runBackTrackingMenu();
-int main()
-{
-    bool isRunning = true;
-    while (isRunning) // while loop program still running when isRunning = true
-    {
-        getMainMenu();                    // display main menu
-        int option = readInputMainMenu(); // get input and set to option
-        if (option == 2)                  // option = 2 for exist program
-        {
-            isRunning = false;
-        }
-        else
-        {
-            runBackTrackingMenu(); // when should option = 1 it will go to submenu backtracking
-        }
-    }
-    return 0;
-}
-void getMainMenu()
-{
-    cout << "\n\nSelect folder..\n\n";
-    cout << " 1. backTracking algorithm \n";
-    cout << " 2. close programs \n";
-}
-void getBackTrackingMenu()
-{
-    cout << "\n\nSelect project backtracking algorithm..\n\n";
-    cout << " 1. eight queen problem \n";
-    cout << " 2. knight tour problem \n";
-    cout << " 3. sudoku problem \n";
-    cout << " 4. exist \n";
-}
-int readInputMainMenu()
-{
-    int option;
-    cin >> option;
-    while (((option < 1) || (option > 2)) || cin.fail())
-    {
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "You have entered wrong input." << endl;
-        cin >> option;
-    }
-    return option;
-}
-int readInputBackTrackingMenu()
-{
-    int option;
-    cin >> option;
-    while (((option < 1) || (option > 4)) || cin.fail())
-    {
-        cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        cout << "You have entered wrong input." << endl;
-        cin >> option;
-    }
-    return option;
-}
-void runBackTrackingMenu()
-{
-    bool isRunning = true;
-    while (isRunning) // it's same main menu
-    {
-        getBackTrackingMenu();                    // display menu
-        int option = readInputBackTrackingMenu(); // get input and set to option
-        switch (option)
-        {
-        case 1:
-            runEightQueen(); // option = 1 for run project eight queen
-            break;
-        case 2:
-            runKnightTour(); // option = 2 for run project knigh tour
-            break;
-        case 3:
-            runSudoku(); // option = 3 for run project sudoku
-            break;
-        case 4:
-            isRunning = false; // option = 4 for exist menu
-            break;
-        }
-    }
-}
-void runEightQueen() // u should change your main function in eight queen project to this name
-{
-    cout << "\n\n*********************************************************************************************************************" << endl;
-    cout << "Eight Queen Problem\n\n";
-    Board board;
-    board.setDefault();
-    board.SetDefaultPostion();
-    board.processParseQueen();
-    board.printAllSolution();
-    cout << "\n\n*********************************************************************************************************************" << endl;
-}
-void runKnightTour() //  u should change your main function in knight project to this name
-{
-    cout << "\n\n*********************************************************************************************************************" << endl;
-    cout << "Knight Tour Problem\n\n";
 
-    KnightTour knightTour;
-    knightTour.runKnightTour();
-    cout << "\n\n*********************************************************************************************************************" << endl;
-}
-void runSudoku() //  u should change your main function in sudoku project to this name
-{
-    cout << "\n\n*********************************************************************************************************************" << endl;
-    cout << "Sudoku Problem\n\n";
-    Sudoku sudoku;
-    sudoku.runSudoku();
-    cout << "\n\n*********************************************************************************************************************" << endl;
-}
-
+#pragma region CopyProject
+#pragma region EightQueen
 // ALL CODE in EightQueen Project
 class Solution
 {
@@ -318,9 +203,10 @@ public:
         }
     }
 };
-
+#pragma endregion EightQueen
 // ALL CODE in KnightTour Project
 
+#pragma region KnightTour
 class KnightTour
 {
 public:
@@ -404,7 +290,9 @@ public:
     int xPositionKnightMove[8] = {2, 1, -1, -2, -2, -1, 1, 2};
     int yPositionKnightMove[8] = {1, 2, 2, 1, -1, -2, -2, -1};
 };
+#pragma endregion KnightTour
 
+#pragma region Soduku
 // ALL CODE in Sodoku Project
 class Sudoku
 {
@@ -774,3 +662,128 @@ public:
         print();
     }
 };
+#pragma endregion Soduku
+// end copy
+#pragma endregion CopyProject
+
+#pragma region new
+void getMainMenu();
+void getBackTrackingMenu();
+void runEightQueen();
+void runKnightTour();
+void runSudoku();
+int readInputMainMenu();
+void runBackTrackingMenu();
+
+int main()
+{
+    bool isRunning = true;
+    while (isRunning) // while loop program still running when isRunning = true
+    {
+        getMainMenu();                    // display main menu
+        int option = readInputMainMenu(); // get input and set to option
+        if (option == 2)                  // option = 2 for exist program
+        {
+            isRunning = false;
+        }
+        else
+        {
+            runBackTrackingMenu(); // when should option = 1 it will go to submenu backtracking
+        }
+    }
+    return 0;
+}
+void getMainMenu()
+{
+    cout << "\n\nSelect folder..\n\n";
+    cout << " 1. backTracking algorithm \n";
+    cout << " 2. close programs \n";
+}
+void getBackTrackingMenu()
+{
+    cout << "\n\nSelect project backtracking algorithm..\n\n";
+    cout << " 1. eight queen problem \n";
+    cout << " 2. knight tour problem \n";
+    cout << " 3. sudoku problem \n";
+    cout << " 4. exist \n";
+}
+int readInputMainMenu()
+{
+    int option;
+    cin >> option;
+    while (((option < 1) || (option > 2)) || cin.fail())
+    {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "You have entered wrong input." << endl;
+        cin >> option;
+    }
+    return option;
+}
+int readInputBackTrackingMenu()
+{
+    int option;
+    cin >> option;
+    while (((option < 1) || (option > 4)) || cin.fail())
+    {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "You have entered wrong input." << endl;
+        cin >> option;
+    }
+    return option;
+}
+void runBackTrackingMenu()
+{
+    bool isRunning = true;
+    while (isRunning) // it's same main menu
+    {
+        getBackTrackingMenu();                    // display menu
+        int option = readInputBackTrackingMenu(); // get input and set to option
+        switch (option)
+        {
+        case 1:
+            runEightQueen(); // option = 1 for run project eight queen
+            break;
+        case 2:
+            runKnightTour(); // option = 2 for run project knigh tour
+            break;
+        case 3:
+            runSudoku(); // option = 3 for run project sudoku
+            break;
+        case 4:
+            isRunning = false; // option = 4 for exist menu
+            break;
+        }
+    }
+}
+void runEightQueen() // u should change your main function in eight queen project to this name
+{
+    cout << "\n\n*********************************************************************************************************************" << endl;
+    cout << "Eight Queen Problem\n\n";
+    Board board;
+    board.setDefault();
+    board.SetDefaultPostion();
+    board.processParseQueen();
+    board.printAllSolution();
+    cout << "\n\n*********************************************************************************************************************" << endl;
+}
+void runKnightTour() //  u should change your main function in knight project to this name
+{
+    cout << "\n\n*********************************************************************************************************************" << endl;
+    cout << "Knight Tour Problem\n\n";
+
+    KnightTour knightTour;
+    knightTour.runKnightTour();
+    cout << "\n\n*********************************************************************************************************************" << endl;
+}
+void runSudoku() //  u should change your main function in sudoku project to this name
+{
+    cout << "\n\n*********************************************************************************************************************" << endl;
+    cout << "Sudoku Problem\n\n";
+    Sudoku sudoku;
+    sudoku.runSudoku();
+    cout << "\n\n*********************************************************************************************************************" << endl;
+}
+
+#pragma endregion new
