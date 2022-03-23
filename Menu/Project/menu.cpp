@@ -12,7 +12,6 @@ int readInputMainMenu();
 void runBackTrackingMenu();
 int main()
 {
-
     bool isRunning = true;
     while (isRunning)
     {
