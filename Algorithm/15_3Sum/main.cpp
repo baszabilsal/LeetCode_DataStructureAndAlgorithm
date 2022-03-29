@@ -1,47 +1,58 @@
 #include <bits/stdc++.h>
 using namespace std;
-vector<vector<int>> threeSum(vector<int> &nums)
+class Solution
 {
-    vector<vector<int>> output;
-    if (nums.size() > 2)
+public:
+    vector<vector<int>> threeSum(vector<int> &nums)
     {
-        sort(nums.begin(), nums.end());
-        for (int i = 0; i < nums.size() - 2; i++)
+        vector<vector<int>> output;
+        if (nums.size() > 2)
         {
-            while (i != 0 && nums[i - 1] == nums[i])
-                i++;
-            cout << i << endl;
-            int l = i + 1;
-            int r = nums.size() - 1;
-            while (l < r)
+            sort(nums.begin(), nums.end());
+            for (int i = 0; i < nums.size() - 2; i++)
             {
-                if (nums[i] + nums[l] + nums[r] == 0)
+                while (i != 0 && i < nums.size() - 2 && nums[i] == nums[i - 1])
                 {
-                    cout << "in" << endl;
-                    vector<int> a = {nums[i], nums[l], nums[r]};
-                    output.push_back(a);
-                    while (l < r && nums[r - 1] == nums[r])
-                        r--;
-                    while (l < r && l > 0 && nums[l] == nums[l + 1])
+                    i++;
+                }
+                int l = i + 1;
+                int r = nums.size() - 1;
+                while (l < r)
+                {
+                    int sum = nums[i] + nums[l] + nums[r];
+                    if (sum == 0)
+                    {
+                        output.push_back({nums[i], nums[l], nums[r]});
                         l++;
-                }
-                if (nums[i] + nums[l] + nums[r] < 0)
-                {
-                    l++;
-                }
-                else
-                {
-                    r--;
+                        r--;
+                        while (l < r && nums[l] == nums[l - 1])
+                        {
+                            l++;
+                        }
+                        while (l < r && nums[r] == nums[r + 1])
+                        {
+                            r--;
+                        }
+                    }
+                    else if (sum < 0)
+                    {
+                        l++;
+                    }
+                    else
+                    {
+                        r--;
+                    }
                 }
             }
         }
+        return output;
     }
-    return output;
-}
+};
 int main()
 {
+    Solution st;
     vector<int> nums = {-2, 0, 0, 2, 2};
-    vector<vector<int>> output = threeSum(nums);
+    vector<vector<int>> output = st.threeSum(nums);
     for (int i = 0; i < output.size(); i++)
     {
         for (int j = 0; j < 3; j++)

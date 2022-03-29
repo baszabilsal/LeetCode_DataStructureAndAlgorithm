@@ -1,672 +1,216 @@
 #include <bits/stdc++.h>
+#define n 8
 using namespace std;
 
-#pragma region CopyProject
-#pragma region EightQueen
+#define size 9
+// const int size= 9;
+
+const int NUMBER_OF_QUEENS = 8;
+int queens[NUMBER_OF_QUEENS], NO;
+void printResult(int NUMBER_OF_QUEENS);
+
 // ALL CODE in EightQueen Project
-class Solution
-{
-public:
-    vector<int> positions;
-    int loop;
-};
-class Queen
-{
-public:
-    int positions;
-    bool isWork;
-};
-class Board
-{
-public:
-    static const int totalQueen = 8;
-    int posistion[totalQueen] = {0, 0, 0, 0, 0, 0, 0, 0};
-    vector<Solution> solutionList;
 
-private:
-    int board[totalQueen][totalQueen];
+bool isValid(int row, int column)
+{
+    for (int i = 1; i <= row - 1; i++)
+        if (queens[i] == column               // Check column
+            || queens[row - i] == column - i  // Check upper left diagonal
+            || queens[row - i] == column + i) // Check upper right diagonal
+            return false;                     // There is a conflict
+    return true;                              // No conflict
+}
+////////////////////////////////////////////////////////////////////////////////////////////
+void nQueens(int row, int NUMBER_OF_QUEENS)
+{
 
-public:
-    void print()
+    for (int i = 1; i <= NUMBER_OF_QUEENS; i++)
     {
-        for (int i = 0; i < totalQueen; i++)
+        if (isValid(row, i))
         {
-            for (int j = 0; j < totalQueen; j++)
-            {
-                cout << board[i][j] << " ";
-            }
-            cout << endl;
+            queens[row] = i;
+            if (row == NUMBER_OF_QUEENS)
+                printResult(NUMBER_OF_QUEENS);
+            else
+                nQueens(row + 1, NUMBER_OF_QUEENS);
         }
     }
-    void setDefault()
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+void printResult(int NUMBER_OF_QUEENS)
+{
+    cout << "Solution No. " << ++NO << endl;
+    for (int column = 1; column <= NUMBER_OF_QUEENS; column++)
     {
-        for (int i = 0; i < totalQueen; i++)
+        for (int j = 1; j <= NUMBER_OF_QUEENS; j++)
         {
-            for (int j = 0; j < totalQueen; j++)
-            {
-                board[i][j] = 0;
-            }
-        }
-    }
-    vector<Queen> GetSafeZone(int column)
-    {
-        vector<Queen> safeZone;
-        for (int i = 0; i < totalQueen; i++)
-        {
-            if (board[i][column] == 0)
-            {
-                Queen q;
-                q.positions = i;
-                q.isWork = true;
-                safeZone.push_back(q);
-            }
-        }
-        return safeZone;
-    }
-    void insertQueen(int row, int column)
-    {
-        board[row][column] = 2;
-        disableAreaWhenSetQueen(row, column);
-    }
-    void disableAreaWhenSetQueen(int row, int column)
-    {
-        for (int i = 0; i < totalQueen; i++)
-        {
-            if (board[row][i] == 0)
-            {
-                board[row][i] = 1;
-            }
-            if (board[i][column] == 0)
-            {
-                board[i][column] = 1;
-            }
-            if (board[row - i][column + i] == 0 && 0 <= row - i && row - i <= totalQueen && 0 <= column + i && column + i <= totalQueen)
-            {
-                board[row - i][column + i] = 1;
-            }
-            if (board[row + i][column + i] == 0 && 0 <= row + i && row + i <= totalQueen && 0 <= column + i && column + i <= totalQueen)
-            {
-                board[row + i][column + i] = 1;
-            }
-            if (board[row - i][column + i] == 0 && 0 <= row - i && row - i <= totalQueen && 0 <= column + i && column + i <= totalQueen)
-            {
-                board[row - i][column + i] = 1;
-            }
-            if (board[row - i][column - i] == 0 && 0 <= row - i && row - i <= totalQueen && 0 <= column - i && column - i <= totalQueen)
-            {
-                board[row - i][column - i] = 1;
-            }
-        }
-    }
-    void processParseQueen()
-    {
-        int count = 0;
-        vector<Queen> postionQueen[totalQueen];
-        postionQueen[0] = GetSafeZone(0);
-        bool isProgramRun = true;
-        for (int column = 0; column < totalQueen; column++)
-        {
-            count++;
-            bool isProcess = false;
-            if (postionQueen[column].size() > 0)
-            {
-                bool isBreak = false;
-                for (int i = 0; i < postionQueen[column].size() && !isBreak; i++)
-                {
-                    if (postionQueen[column][i].isWork)
-                    {
-                        postionQueen[column][i].isWork = false;
-                        posistion[column] = postionQueen[column][i].positions + 1;
-                        SetQueen();
-                        // print();
-                        if (column + 1 < totalQueen)
-                        {
-                            postionQueen[column + 1] = GetSafeZone(column + 1);
-                        }
-                        isBreak = true;
-                        isProcess = true;
-                    }
-                }
-            }
-            if (!isProcess)
-            {
-                if (column == 0)
-                {
-                    break;
-                }
-                else
-                {
-                    posistion[column - 1] = 0;
-                    column = column - 2;
-                    SetQueen();
-                }
-            }
-            else if (column + 1 == totalQueen)
-            {
-                solutionList.push_back(getSolution(count));
-                // print();
-                posistion[column - 1] = 0;
-                posistion[column] = 0;
-                column = column - 2;
-                SetQueen();
-            }
-        }
-    }
-    void SetQueen()
-    {
-        setDefault();
-        for (int j = 0; j < totalQueen; j++)
-        {
-            if (posistion[j] > 0)
-            {
-                insertQueen(posistion[j] - 1, j);
-            }
-        }
-    }
-    void SetDefaultPostion()
-    {
-        for (int i = 0; i < totalQueen; i++)
-        {
-            posistion[i] = 0;
-        }
-    }
-    void printPosition()
-    {
-        cout << endl
-             << "postion : ";
-        for (int i = 0; i < totalQueen; i++)
-        {
-            cout << posistion[i] << ",";
+            if (queens[column] != j)
+                cout << "| ";
+            else
+                cout << "| Q ";
         }
         cout << endl;
     }
-    Solution getSolution(int loop)
-    {
-        Solution solution;
-        solution.loop = loop;
-        for (int i = 0; i < totalQueen; i++)
-        {
-            solution.positions.push_back(posistion[i]);
-        }
-        return solution;
-    }
-    void printAllSolution()
-    {
-        for (int i = 0; i < solutionList.size(); i++)
-        {
-            cout << "solution  " << i + 1 << " from loop number " << solutionList[i].loop << " : ";
-            for (int j = 0; j < solutionList[i].positions.size(); j++)
-            {
-                cout << solutionList[i].positions[j] << ",";
-            }
-            cout << endl;
-        }
-    }
-};
-#pragma endregion EightQueen
+}
+
 // ALL CODE in KnightTour Project
 
-#pragma region KnightTour
-class KnightTour
+bool valid(int nx, int ny, int mat[n][n])
 {
-public:
-    const static int boardSize = 8;
-
-public:
-    bool isPositonCanTour(int x, int y)
+    return (nx >= 0 and nx < n and ny >= 0 and ny < n and mat[nx][ny] == -1);
+}
+////////////////////////////////////////////////////////////////////////////
+bool go(int mat[n][n], int x, int y, int mv, int dx[n], int dy[n])
+{
+    if (mv == n * n)
     {
-        return (x >= 0 && x < boardSize && y >= 0 && y < boardSize && board[x][y] == 0);
+        return 1;
     }
-    void setDefaultBoard()
+
+    for (int k = 0; k < 8; k++)
+
     {
-        for (int i = 0; i < KnightTour::boardSize; i++)
+        int nx = x + dx[k];
+        int ny = y + dy[k];
+        if (valid(nx, ny, mat))
         {
-            for (int j = 0; j < KnightTour::boardSize; j++)
+            mat[nx][ny] = mv;
+            if (go(mat, nx, ny, mv + 1, dx, dy) == 1)
             {
-                board[i][j] = 0;
+                return 1;
             }
+            mat[nx][ny] = -1; // fill with -1
         }
     }
-    void print()
-    {
-        for (int i = 0; i < KnightTour::boardSize; i++)
-        {
-            for (int j = 0; j < KnightTour::boardSize; j++)
-            {
-                cout << " " << setw(2) << board[i][j] << " ";
-            }
-            cout << endl;
-        }
-    }
-    bool tour(int xPosition, int yPosition, int loop)
-    {
-        int knightMove, xNextPosition, yNextPosition;
-        if (loop == KnightTour::boardSize * KnightTour::boardSize)
-        {
-            return true;
-        }
+    return 0;
+}
 
-        for (knightMove = 0; knightMove < 8; knightMove++)
-        {
-            xNextPosition = xPosition + xPositionKnightMove[knightMove];
-            yNextPosition = yPosition + yPositionKnightMove[knightMove];
-            if (isPositonCanTour(xNextPosition, yNextPosition))
-            {
-                board[xNextPosition][yNextPosition] = loop;
-                if (tour(xNextPosition, yNextPosition, loop + 1))
-                {
-                    return true;
-                }
-                else
-                {
-                    // back tracking
-                    board[xNextPosition][yNextPosition] = 0;
-                }
-            }
-        }
-        return false;
-    }
-    void solve()
-    {
-        if (tour(0, 0, 1))
-        {
-            cout << " Result : " << endl;
-            print();
-        }
-        else
-        {
-            print();
-            cout << "it not work" << endl;
-        }
-    }
-    void runKnightTour()
-    {
-        setDefaultBoard();
-        solve();
-    }
-
-public:
-    int board[KnightTour::boardSize][KnightTour::boardSize];
-    int xPositionKnightMove[8] = {2, 1, -1, -2, -2, -1, 1, 2};
-    int yPositionKnightMove[8] = {1, 2, 2, 1, -1, -2, -2, -1};
-};
-#pragma endregion KnightTour
-
-#pragma region Soduku
 // ALL CODE in Sodoku Project
-class Sudoku
+int getFreeCellList(int grid[][size], int freeCellList[][2])
 {
-public:
-    static const int size = 9;
+    // 81 is the maximum number of free cells
+    int numberOfFreeCells = 0;
 
-private:
-    int board[size][size] = {{0, 4, 0, 0, 0, 0, 1, 7, 9},
-                             {0, 0, 2, 0, 0, 8, 0, 5, 4},
-                             {0, 0, 6, 0, 0, 5, 0, 0, 8},
-                             {0, 8, 0, 0, 7, 0, 9, 1, 0},
-                             {0, 5, 0, 0, 9, 0, 0, 3, 0},
-                             {0, 1, 9, 0, 6, 0, 0, 4, 0},
-                             {3, 0, 0, 4, 0, 0, 7, 0, 0},
-                             {5, 7, 0, 1, 0, 0, 2, 0, 0},
-                             {9, 2, 8, 0, 0, 0, 0, 6, 0}};
-    int boardSolved[size][size] = {{8, 4, 5, 6, 3, 2, 1, 7, 9},
-                                   {7, 3, 2, 9, 1, 8, 6, 5, 4},
-                                   {1, 9, 6, 7, 4, 5, 3, 2, 8},
-                                   {6, 8, 3, 5, 7, 4, 9, 1, 2},
-                                   {4, 5, 7, 2, 9, 1, 8, 3, 6},
-                                   {2, 1, 9, 8, 6, 3, 5, 4, 7},
-                                   {3, 6, 1, 4, 2, 9, 7, 8, 5},
-                                   {5, 7, 4, 1, 8, 6, 2, 9, 3},
-                                   {9, 2, 8, 3, 5, 7, 4, 6, 1}};
-    int boardError[size][size];
+    for (int i = 0; i < size; i++)
+        for (int j = 0; j < size; j++)
+            if (grid[i][j] == 0)
+            {
+                freeCellList[numberOfFreeCells][0] = i;
+                freeCellList[numberOfFreeCells][1] = j;
+                numberOfFreeCells++;
+            }
 
-public:
-    void clearBoard()
+    return numberOfFreeCells;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+/** Print the values in the grid */
+void printGrid(int grid[][size])
+{
+    for (int i = 0; i < size; i++)
     {
-        for (int i = 0; i < Sudoku::size; i++)
-        {
-            for (int j = 0; j < Sudoku::size; j++)
-            {
-                board[i][j] = 0;
-            }
-        }
-    }
-    void readInput()
-    {
-        for (int i = 0; i < Sudoku::size; i++)
-        {
-            for (int j = 0; j < Sudoku::size; j++)
-            {
-                cin >> boardSolved[i][j];
-            }
-        }
-        for (int i = 0; i < Sudoku::size; i++)
-        {
-            for (int j = 0; j < Sudoku::size; j++)
-            {
-                cin >> board[i][j];
-            }
-        }
-        for (int i = 0; i < Sudoku::size; i++)
-        {
-            for (int j = 0; j < Sudoku::size; j++)
-            {
-                cin >> boardError[i][j];
-            }
-        }
-    }
-    void print()
-    {
-        for (int i = 0; i < Sudoku::size; i++)
-        {
-            for (int j = 0; j < Sudoku::size; j++)
-            {
-                cout << board[i][j] << " ";
-            }
-            cout << endl;
-        }
-    }
-    void printBoardSolved()
-    {
-        for (int i = 0; i < Sudoku::size; i++)
-        {
-            for (int j = 0; j < Sudoku::size; j++)
-            {
-                cout << boardSolved[i][j] << " ";
-            }
-            cout << endl;
-        }
-    }
-    void printBoardError()
-    {
-        for (int i = 0; i < Sudoku::size; i++)
-        {
-            for (int j = 0; j < Sudoku::size; j++)
-            {
-                cout << boardError[i][j] << " ";
-            }
-            cout << endl;
-        }
-    }
-    void checkColumn(int column, int locatedRow)
-    {
-        for (int i = 0; i < size; i++)
-        {
-            if (locatedRow == i)
-            {
-                board[i][column] = 2;
-            }
-            else
-            {
-                board[i][column] = 1;
-            }
-        }
-    }
-    void checkRow(int row, int locatedColumn)
-    {
-        for (int i = 0; i < size; i++)
-        {
-            if (locatedColumn == i)
-            {
-                board[row][i] = 2;
-            }
-            else
-            {
-                board[row][i] = 1;
-            }
-        }
-    }
-    void checkBox(int row, int column)
-    {
-        int boxRow = row / 3;
-        int boxColumn = column / 3;
-        int t = 0;
-        while (t < size)
-        {
-            int x = t / 3;
-            int y = t % 3;
-            x += 3 * boxRow;
-            y += 3 * boxColumn;
-            if (row == x && column == y)
-            {
-                board[x][y] = 2;
-            }
-            else
-            {
-                board[x][y] = 1;
-            }
-            t++;
-        }
-    }
-    bool validateRow(int row, int locatedColumn, int target)
-    {
-        for (int i = 0; i < size; i++)
-        {
-            if (locatedColumn != i && board[row][i] == target)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-    bool validateColumn(int column, int locatedRow, int target)
-    {
-        for (int i = 0; i < size; i++)
-        {
-            if (locatedRow != i && board[i][column] == target)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-    bool validateBox(int row, int column, int target)
-    {
-        int boxRow = row / 3;
-        int boxColumn = column / 3;
-        int t = 0;
-        while (t < size)
-        {
-            int x = t / 3;
-            int y = t % 3;
-            x += 3 * boxRow;
-            y += 3 * boxColumn;
-            if (row != x && column != y && board[x][y] == target)
-            {
-                return false;
-            };
-            t++;
-        }
-        return true;
-    }
-    bool validateNumber(int row, int column, int number)
-    {
-        return validateRow(row, column, number) && validateColumn(column, row, number) && validateBox(row, column, number);
-    }
-    vector<int> getPosibileNumber(int row, int column)
-    {
-        vector<int> posibileNumbers;
-        for (int i = 0; i < size; i++)
-        {
-            if (validateNumber(row, column, i + 1))
-            {
-                posibileNumbers.push_back(i + 1);
-            }
-        }
-        return posibileNumbers;
-    }
-    bool solveJust1Box(int row, int column, int loop)
-    {
-        int nextColumn, nextRow;
-        if (loop % 3 == 0)
-        {
-            nextColumn = 0;
-            nextRow = row + 1;
-        }
-        else
-        {
-            nextRow = row;
-            nextColumn = column + 1;
-        }
-        if (board[row][column] != 0)
-        {
-            loop++;
-            row = nextRow;
-            column = nextColumn;
-            if (loop % 3 == 0 && loop != 0)
-            {
-                nextColumn = 0;
-                nextRow = row + 1;
-            }
-            else
-            {
-                nextRow = row;
-                nextColumn = column + 1;
-            }
-        }
-        if (loop == 10)
-        {
-            return true;
-        }
-        vector<int> posibileNumber = getPosibileNumber(row, column);
-        for (int i = 0; i < posibileNumber.size(); i++)
-        {
-            board[row][column] = posibileNumber[i];
-            if (solveJust1Box(nextRow, nextColumn, loop + 1))
-            {
-                return true;
-            }
-            else
-            {
-                board[row][column] = 0;
-            }
-        }
-        return false;
-    }
-    bool solve(int row, int column, int loop)
-    {
-        int nextColumn, nextRow;
-        if (column != 8)
-        {
-            nextRow = row;
-            nextColumn = column + 1;
-        }
-        else
-        {
-            nextColumn = 0;
-            nextRow = row + 1;
-        }
-        if (board[row][column] != 0)
-        {
-            loop++;
-            row = nextRow;
-            column = nextColumn;
-            if (column != 8)
-            {
-                nextRow = row;
-                nextColumn = column + 1;
-            }
-            else
-            {
-                nextColumn = 0;
-                nextRow = row + 1;
-            }
-        }
-        if (loop > size * size)
-        {
-            return true;
-        }
-        if (board[row][column] != 0)
-        {
-            solve(nextRow, nextColumn, loop + 1);
-        }
-        vector<int> posibileNumber = getPosibileNumber(row, column);
-        for (int i = 0; i < posibileNumber.size(); i++)
-        {
-            board[row][column] = posibileNumber[i];
-            if (solve(nextRow, nextColumn, loop + 1))
-            {
-                return true;
-            }
-            else
-            {
-                board[row][column] = 0;
-            }
-        }
-        return false;
-    }
-    void printPosible(vector<int> posibileNumber)
-    {
-        for (int i = 0; i < posibileNumber.size(); i++)
-        {
-            cout << posibileNumber[i] << endl;
-        }
-    }
-    void checkResult()
-    {
-        cout << "Solve Board" << endl;
-        printBoardSolved();
-        bool isValidate = true;
-        for (int i = 0; i < Sudoku::size; i++)
-        {
-            for (int j = 0; j < Sudoku::size; j++)
-            {
-                if (board[i][j] == boardSolved[i][j])
-                {
-                    cout << "\033[1;32m" << board[i][j] << "\033[0m"
-                         << " ";
-                }
-                else if (j == i)
-                {
-                    isValidate = false;
-                    cout << "\033[1;31m" << board[i][j] << "\033[0m"
-                         << " ";
-                }
-            }
-            cout << endl;
-        }
-        cout << (isValidate ? "Success" : "Error") << endl;
-    }
-    void testWhenResultError()
-    {
-        cout << "Error Board" << endl;
-        printBoardError();
-        bool isValidate = true;
-        for (int i = 0; i < Sudoku::size; i++)
-        {
-            for (int j = 0; j < Sudoku::size; j++)
-            {
-                if (board[i][j] == boardError[i][j])
-                {
-                    cout << "\033[1;32m" << board[i][j] << "\033[0m"
-                         << " ";
-                }
-                else if (j == i)
-                {
-                    isValidate = false;
-                    cout << "\033[1;31m" << board[i][j] << "\033[0m"
-                         << " ";
-                }
-            }
-            cout << endl;
-        }
-        cout << (isValidate ? "Success" : "Error") << endl;
-    }
-    void runSudoku()
-    {
-        // clearBoard();
-        //  readInput();
-        print();
+        for (int j = 0; j < size; j++)
+            cout << grid[i][j] << " ";
         cout << endl;
-        solve(0, 0, 1);
-        print();
     }
-};
-#pragma endregion Soduku
-// end copy
-#pragma endregion CopyProject
+}
+///////////////////////////////////////////////////////////////////////////////////
+/** Check whether grid[i][j] is valid in the grid */
+bool isValid(int i, int j, int grid[][size])
+{
+    // Check whether grid[i][j] is valid at the i's row
+    for (int column = 0; column < size; column++)
+        if (column != j && grid[i][column] == grid[i][j])
+            return false;
 
-#pragma region new
+    // Check whether grid[i][j] is valid at the j's column
+    for (int row = 0; row < size; row++)
+        if (row != i && grid[row][j] == grid[i][j])
+            return false;
+
+    // Check whether grid[i][j] is valid in the 3 by 3 box
+    for (int row = (i / 3) * 3; row < (i / 3) * 3 + 3; row++)
+        for (int col = (j / 3) * 3; col < (j / 3) * 3 + 3; col++)
+            if (row != i && col != j && grid[row][col] == grid[i][j])
+                return false;
+
+    return true; // The current value at grid[i][j] is valid
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+/** Search for a solution */
+bool search(int grid[][size])
+{
+    int k = 0;          // Start from the first free cell
+    bool found = false; // Solution found?
+
+    int freeCellList[81][2];
+    int numberOfFreeCells = getFreeCellList(grid, freeCellList);
+
+    while (!found)
+    {
+        int i = freeCellList[k][0];
+        int j = freeCellList[k][1];
+        if (grid[i][j] == 0)
+            grid[i][j] = 1; // Start with 1
+
+        if (isValid(i, j, grid))
+        {
+            if (k + 1 == numberOfFreeCells)
+            {                 // No more free cells
+                found = true; // A solution is found
+            }
+            else
+            { // Move to the next free cell
+                k++;
+            }
+        }
+        else if (grid[i][j] < size)
+        {
+            grid[i][j] = grid[i][j] + 1; // Check the next possible value
+        }
+        else
+        { // grid[i][j] is 9, backtrack
+            while (grid[i][j] == size)
+            {
+                grid[i][j] = 0; // Reset to free cell
+                if (k == 0)
+                {
+                    return false; // No possible value
+                }
+                k--; // Backtrack
+                i = freeCellList[k][0];
+                j = freeCellList[k][1];
+            }
+
+            grid[i][j] = grid[i][j] + 1; // Check the next possible value
+        }
+    }
+
+    return true; // A solution is found
+}
+
+////////////////////////////////////////////////////////////////////////////////
+bool Range(int grid[][size])
+{
+    // Check for duplicate numbers
+    for (int i = 0; i < size; i++)
+        for (int j = 0; j < size; j++)
+            if (grid[i][j] != 0)
+                if (!isValid(i, j, grid))
+                    return false;
+
+    // Check whether numbers are in the range
+    for (int i = 0; i < size; i++)
+        for (int j = 0; j < size; j++)
+            if ((grid[i][j] < 0) || (grid[i][j] > size))
+                return false;
+
+    return true; // The fixed cells are valid
+}
+///////////////////////////////////////////////////////////////////////////////////
+
 void getMainMenu();
 void getBackTrackingMenu();
 void runEightQueen();
@@ -757,33 +301,59 @@ void runBackTrackingMenu()
         }
     }
 }
-void runEightQueen() // u should change your main function in eight queen project to this name
+void runEightQueen() //  Main Function of EightQueen
 {
     cout << "\n\n*********************************************************************************************************************" << endl;
     cout << "Eight Queen Problem\n\n";
-    Board board;
-    board.setDefault();
-    board.SetDefaultPostion();
-    board.processParseQueen();
-    board.printAllSolution();
+
+    {
+        nQueens(8, NUMBER_OF_QUEENS);
+    }
     cout << "\n\n*********************************************************************************************************************" << endl;
 }
-void runKnightTour() //  u should change your main function in knight project to this name
+void runKnightTour() //  Main Function of KnightTour
 {
     cout << "\n\n*********************************************************************************************************************" << endl;
     cout << "Knight Tour Problem\n\n";
 
-    KnightTour knightTour;
-    knightTour.runKnightTour();
-    cout << "\n\n*********************************************************************************************************************" << endl;
+    int mat[n][n];
+    memset(mat, -1, sizeof(mat)); // fill metrix with -1
+    mat[0][0] = 0;                // first Move
+    int dx[8] = {2, 1, -1, -2, -2, -1, 1, 2};
+    int dy[8] = {1, 2, 2, 1, -1, -2, -2, -1};
+    if (go(mat, 0, 0, 1, dx, dy))
+
+    {
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+                cout << mat[i][j] << "\t";
+            cout << endl;
+        }
+        cout << "\n\n*********************************************************************************************************************" << endl;
+    }
 }
-void runSudoku() //  u should change your main function in sudoku project to this name
+void runSudoku() // Main Function of Sudoku
 {
     cout << "\n\n*********************************************************************************************************************" << endl;
-    cout << "Sudoku Problem\n\n";
-    Sudoku sudoku;
-    sudoku.runSudoku();
-    cout << "\n\n*********************************************************************************************************************" << endl;
-}
+    int grid[size][size] = {{0, 4, 0, 0, 0, 0, 1, 7, 9},
+                            {0, 0, 2, 0, 0, 8, 0, 5, 4},
+                            {0, 0, 6, 0, 0, 5, 0, 0, 8},
+                            {0, 8, 0, 0, 7, 0, 9, 1, 0},
+                            {0, 5, 0, 0, 9, 0, 0, 3, 0},
+                            {0, 1, 9, 0, 6, 0, 0, 4, 0},
+                            {3, 0, 0, 4, 0, 0, 7, 0, 0},
+                            {5, 7, 0, 1, 0, 0, 2, 0, 0},
+                            {9, 2, 8, 0, 0, 0, 0, 6, 0}};
 
-#pragma endregion new
+    if (!Range(grid))
+        cout << "Invalid input" << endl;
+
+    else if (search(grid))
+    {
+        cout << " The soulution found:" << endl;
+        printGrid(grid);
+    }
+    else
+        cout << "no solution" << endl;
+}
